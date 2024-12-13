@@ -1,0 +1,17 @@
+---
+- name: configure raspberry pi
+  hosts: raspberry1
+
+  tasks:
+  - name: ensure packages are at latest version
+    become: true
+    ansible.builtin.apt:
+      name: "*"
+      state: latest
+      update_cache: true
+
+  - name: ensure git is available
+    become: true
+    ansible.builtin.apt:
+      name: "git"
+      state: latest
