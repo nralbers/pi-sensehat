@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sensehat_exporter_nralbers"
+version = "0.0.1"
+authors = [
+  { name="Natalie Albers", email="nralbers@gmail.com" },
+]
+description = "A prometheus exporter for the Raspberry Pi sense V2 hat board"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies=[
+    "prometheus-client",
+    "fastapi[standard]",
+    "sense-hat",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/nralbers/pi-sensehat"
+Issues = "https://github.com/nralbers/pi-sensehat/issues"
