@@ -1,5 +1,4 @@
-from prometheus_client.core import (REGISTRY, CounterMetricFamily,
-                                    GaugeMetricFamily)
+from prometheus_client.core import GaugeMetricFamily
 from prometheus_client.registry import Collector
 from sense_hat import SenseHat
 
@@ -57,6 +56,3 @@ class CustomCollector(Collector):
                 [axis], value=self.sense.get_orientation_radians()[axis]
             )
             yield orientation_radians
-
-
-REGISTRY.register(CustomCollector())

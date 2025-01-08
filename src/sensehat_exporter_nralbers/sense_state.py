@@ -1,21 +1,20 @@
 import math
-import os
+from sensehat_exporter_nralbers.signal_handler import SignalHandler
 from collections import namedtuple
 from enum import Enum, StrEnum, auto
-from signal import SIGUSR1
 from time import sleep
 
-from sense_hat import (ACTION_HELD, ACTION_PRESSED, ACTION_RELEASED,
-                       InputEvent, SenseHat)
+from sense_hat import ACTION_HELD, ACTION_PRESSED, ACTION_RELEASED, InputEvent, SenseHat
 
 
 class DisplayState(StrEnum):
     TEMP = auto()
     PRESSURE = auto()
     HUMIDITY = auto()
+    DEFAULT = auto()
 
 
-state: DisplayState = DisplayState.TEMP
+state: DisplayState = DisplayState.DEFAULT
 
 
 class Colours(Enum):
@@ -25,30 +24,31 @@ class Colours(Enum):
 
 
 WHITE = [255, 255, 255]
+W = WHITE
 RED = [255, 0, 0]
+R = RED
 GREEN = [0, 255, 0]
+G = GREEN
 BLUE = [0, 0, 255]
+B = BLUE
 CYAN = [0, 255, 255]
-YELLOW = [255,255,0]
+C = CYAN
+YELLOW = [255, 255, 0]
+Y = YELLOW
+X = [0, 0, 0]
+
 SCROLL_SPEED = 0.075
 PROCESS_LOOP_DELAY_SEC = 0.5
+
 
 Readings = namedtuple("Readings", ["temp", "humidity", "pressure"])
 sense = SenseHat()
 
 
-def reset_and_exit():
-    sense.clear()
-    os.kill(os.getpid(), SIGUSR1)
-
-def clear():
-    sense.clear()
-
 def pushed_middle(event: InputEvent):
-    if event.action == ACTION_HELD:
-        reset_and_exit()
-    elif event.action == ACTION_PRESSED:
-        clear()
+    if event.action != ACTION_RELEASED:
+        global state
+        state = DisplayState.DEFAULT
 
 
 def pushed_up(event: InputEvent):
@@ -142,18 +142,25 @@ def display_readings(readings: Readings):
         sense.show_message(
             f"{pressure:.0f}mb", scroll_speed=SCROLL_SPEED, text_colour=colour
         )
+    elif state == DisplayState.DEFAULT:
+        sense.set_pixel(7,7,255,0,0)
+
 
 
 def main() -> None:
+    signal_handler = SignalHandler()
     sense.stick.direction_middle = pushed_middle
     sense.stick.direction_up = pushed_up
     sense.stick.direction_left = pushed_left
     sense.stick.direction_right = pushed_right
+    sense.low_light = True
 
-    while True:
+    while signal_handler.can_run():
         readings = get_env_readings()
         display_readings(readings)
         sleep(PROCESS_LOOP_DELAY_SEC)
+    sense.show_message("Goodbye!", scroll_speed=SCROLL_SPEED, text_colour=GREEN)
+    sense.low_light = False
 
 
 if __name__ == "__main__":

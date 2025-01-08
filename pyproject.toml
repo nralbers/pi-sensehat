@@ -25,3 +25,6 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/nralbers/pi-sensehat"
 Issues = "https://github.com/nralbers/pi-sensehat/issues"
+
+[project.scripts]
+sense-daemon="sensehat_exporter_nralbers.sense_state:main"

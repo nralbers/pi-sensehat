@@ -1,0 +1,17 @@
+[Unit]
+Description=Sense bord UI daemon
+After=network.target
+
+[Service]
+User=nralbers
+Group=nralbers
+WorkingDirectory=/opt/sensehat_exporter
+Environment="PATH=/opt/sensehat_exporter/venv/bin"
+ExecStart=/opt/sensehat_exporter/venv/bin/sense-daemon
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

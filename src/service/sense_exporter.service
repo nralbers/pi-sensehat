@@ -1,0 +1,17 @@
+[Unit]
+Description=Run gunicorn sense_hat exporter
+After=network.target
+
+[Service]
+User=nralbers
+Group=nralbers
+WorkingDirectory=/opt/sensehat_exporter
+Environment="PATH=/opt/sensehat_exporter/venv/bin"
+ExecStart=/opt/sensehat_exporter/venv/bin/gunicorn --bind 0.0.0.0:11011 sensehat_exporter_nralbers.myapp:app -k uvicorn.workers.UvicornWorker
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
