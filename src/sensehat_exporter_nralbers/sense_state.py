@@ -124,26 +124,30 @@ def get_humidity_colour(value):
 
 
 def display_readings(readings: Readings):
+    global state
     if state == DisplayState.TEMP:
         temp = readings.temp
         colour = get_temperature_colour(temp)
         sense.show_message(
             f"{temp:.0f}C", scroll_speed=SCROLL_SPEED, text_colour=colour
         )
+        state = DisplayState.DEFAULT
     elif state == DisplayState.HUMIDITY:
         humidity = readings.humidity
         colour = get_humidity_colour(humidity)
         sense.show_message(
             f"{humidity:.0f}%", scroll_speed=SCROLL_SPEED, text_colour=colour
         )
+        state = DisplayState.DEFAULT
     elif state == DisplayState.PRESSURE:
         pressure = readings.pressure
         colour = YELLOW
         sense.show_message(
             f"{pressure:.0f}mb", scroll_speed=SCROLL_SPEED, text_colour=colour
         )
+        state = DisplayState.DEFAULT
     elif state == DisplayState.DEFAULT:
-        sense.set_pixel(7,7,255,0,0)
+        sense.set_pixel(7,7,100,0,0)
 
 
 
@@ -159,7 +163,7 @@ def main() -> None:
         readings = get_env_readings()
         display_readings(readings)
         sleep(PROCESS_LOOP_DELAY_SEC)
-    sense.show_message("Goodbye!", scroll_speed=SCROLL_SPEED, text_colour=GREEN)
+    sense.show_message("bye!", scroll_speed=SCROLL_SPEED, text_colour=GREEN)
     sense.low_light = False
 
 

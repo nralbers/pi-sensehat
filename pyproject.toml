@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sensehat_exporter_nralbers"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
   { name="Natalie Albers", email="nralbers@gmail.com" },
 ]
