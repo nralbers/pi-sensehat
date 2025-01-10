@@ -129,7 +129,7 @@ def display_readings(readings: Readings):
         temp = readings.temp
         colour = get_temperature_colour(temp)
         sense.show_message(
-            f"{temp:.0f}C", scroll_speed=SCROLL_SPEED, text_colour=colour
+            f"{temp:.1f}C", scroll_speed=SCROLL_SPEED, text_colour=colour
         )
         state = DisplayState.DEFAULT
     elif state == DisplayState.HUMIDITY:
